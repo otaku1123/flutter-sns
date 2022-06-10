@@ -15,4 +15,22 @@ class Authentication {
       return false;
     }
   }
+
+  static Future<dynamic> emailSignIn({required String email, required String pass}) async {
+    try {
+      final UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
+          email: email,
+          password: pass
+      );
+
+      currentFirebaseUser = result.user;
+      print('authサインイン完了');
+
+      return true;
+    } on FirebaseAuthException catch (e) {
+      print('authサインイン失敗 $e');
+
+      return false;
+    }
+  }
 }
