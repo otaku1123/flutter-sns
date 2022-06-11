@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:sns_app/model/account.dart';
 import 'package:sns_app/model/post.dart';
 import 'package:sns_app/utils/authentication.dart';
+import 'package:sns_app/view/account/edit_account_page.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({ Key? key }) : super(key: key);
@@ -69,7 +70,14 @@ class _AccountPageState extends State<AccountPage> {
                           ],
                           ),
                           ElevatedButton(
-                            onPressed: (){},
+                            onPressed: () async {
+                              var result = await Navigator.push(context, MaterialPageRoute(builder: (context)=> EditAccountPage()));
+                              if (result == true) {
+                                setState(() {
+                                  myAccount = Authentication.myAccount!;
+                                });
+                              }
+                            },
                             child: Text('編集'),
                           )
                         ],
