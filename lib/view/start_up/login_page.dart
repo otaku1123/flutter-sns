@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_signin_button/button_view.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:sns_app/utils/authentication.dart';
 import 'package:sns_app/utils/firestore/users.dart';
@@ -29,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 50,
               ),
               Text(
-                'Flutter lab SNS',
+                '独り言SNS',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               Container(
@@ -91,10 +90,10 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   }
                 },
-                child: Text('emailでログイン'),
+                child: Text('メールアドレスでログイン'),
               ),
               SignInButton(
-                  Buttons.Google,
+                  Buttons.GoogleDark,
                   onPressed: () async {
                     var result = await Authentication.signInWithGoogle();
                     if (result is UserCredential) {
