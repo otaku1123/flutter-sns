@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "128593404060",
+    "project_id": "chat-app-23501",
+    "storage_bucket": "chat-app-23501.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128593404060:android:e186cc31c4a1a0c39b0d59",
+        "android_client_info": {
+          "package_name": "com.example.sns_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "128593404060-pjckhk6c514h8vbmtiobefsm2evuvubb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxSute_x51FXlHalTtrXIT6s93Y05tCpo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "128593404060-pjckhk6c514h8vbmtiobefsm2evuvubb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "128593404060-5g7gp5cnuocmqpb84l3fbg5o7oc1klaf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ogaw.snsApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
