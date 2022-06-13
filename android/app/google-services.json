@@ -29,6 +29,13 @@
             {
               "client_id": "128593404060-pjckhk6c514h8vbmtiobefsm2evuvubb.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "128593404060-5g7gp5cnuocmqpb84l3fbg5o7oc1klaf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ogaw.snsApp"
+              }
             }
           ]
         }

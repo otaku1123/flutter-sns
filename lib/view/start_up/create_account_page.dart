@@ -9,9 +9,14 @@ import 'package:sns_app/utils/authentication.dart';
 import 'package:sns_app/utils/firestore/users.dart';
 import 'package:sns_app/utils/function_utils.dart';
 import 'package:sns_app/utils/widget_utils.dart';
+import 'package:sns_app/view/screen.dart';
 import 'package:sns_app/view/start_up/check_email_page.dart';
 
 class CreateAccountPage extends StatefulWidget {
+  final bool isSignInWithGoogle;
+
+  CreateAccountPage({this.isSignInWithGoogle = false});
+
   @override
   _CreateAccountPageState createState() => _CreateAccountPageState();
 }
@@ -75,44 +80,49 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                   decoration: InputDecoration(hintText: '自己紹介'),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 20.0),
-                child: Container(
-                  width: 300,
-                  child: TextField(
-                    controller: emailController,
-                    decoration: InputDecoration(hintText: 'メールアドレス'),
+              widget.isSignInWithGoogle ? Container(): Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20.0),
+                    child: Container(
+                      width: 300,
+                      child: TextField(
+                        controller: emailController,
+                        decoration: InputDecoration(hintText: 'メールアドレス'),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Container(
-                width: 300,
-                child: TextField(
-                  controller: passController,
-                  decoration: InputDecoration(hintText: 'パスワード'),
-                ),
+                  Container(
+                    width: 300,
+                    child: TextField(
+                      controller: passController,
+                      decoration: InputDecoration(hintText: 'パスワード'),
+                    ),
+                  ),
+                ],
               ),
               ElevatedButton(
                 onPressed: () async {
                   if (nameController.text.isNotEmpty &&
                       userIdController.text.isNotEmpty &&
                       selfIntroductionController.text.isNotEmpty &&
-                      emailController.text.isNotEmpty &&
-                      passController.text.isNotEmpty &&
+                      // emailController.text.isNotEmpty &&
+                      // passController.text.isNotEmpty &&
                       image != null) {
+                    if (widget.isSignInWithGoogle == true) {
+                      var _result = await createAccount(Authentication.currentFirebaseUser!.uid);
+
+                      if (_result == true) {
+                        await UserFirestore.getUser(Authentication.currentFirebaseUser!.uid);
+                        Navigator.pop(context);
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Screen()));
+                      }
+                    }
+
                     var result = await Authentication.signUp(email: emailController.text, pass: passController.text);
 
                     if (result is UserCredential) {
-                      String imagePath = await FunctionUtils.uploadImage(result.user!.uid, image!);
-                      Account newAccount = Account(
-                        id: result.user!.uid,
-                        name: nameController.text,
-                        userId: userIdController.text,
-                        selfIntroduction: selfIntroductionController.text,
-                        imagePath: imagePath,
-                      );
-                      var _result = await UserFirestore.setUser(newAccount);
-
+                      var _result = await createAccount(result.user!.uid);
                       if (_result == true) {
                         result.user!.sendEmailVerification();
                         Navigator.push(context, MaterialPageRoute(
@@ -135,5 +145,18 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         ),
       ),
     );
+  }
+
+  Future<dynamic> createAccount(String uid) async{
+    String imagePath = await FunctionUtils.uploadImage(uid, image!);
+    Account newAccount = Account(
+      id: uid,
+      name: nameController.text,
+      userId: userIdController.text,
+      selfIntroduction: selfIntroductionController.text,
+      imagePath: imagePath,
+    );
+    var _result = await UserFirestore.setUser(newAccount);
+    return _result;
   }
 }
