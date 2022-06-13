@@ -23,58 +23,73 @@ class _LoginPageState extends State<LoginPage> {
           width: double.infinity,
           child: Column(
             children: [
-              SizedBox(height: 50,),
-              Text('Flutter lab SNS',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+              SizedBox(
+                height: 50,
+              ),
+              Text(
+                'Flutter lab SNS',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
               Container(
                 padding: EdgeInsets.symmetric(vertical: 20),
                 width: 300,
                 child: TextField(
                   controller: emailController,
-                  decoration: InputDecoration(
-                    hintText: 'メールアドレス'
-                  ),
+                  decoration: InputDecoration(hintText: 'メールアドレス'),
                 ),
               ),
               Container(
                 width: 300,
                 child: TextField(
                   controller: passController,
-                  decoration: InputDecoration(
-                      hintText: 'パスワード'
-                  ),
+                  decoration: InputDecoration(hintText: 'パスワード'),
                 ),
               ),
-              SizedBox(height: 10,),
-              RichText(
-                  text: TextSpan(
-                      style: TextStyle(color: Colors.black),
-                    children:[
-                      TextSpan(text: 'アカウントを作成していない方は'),
-                      TextSpan(
-                        text: 'こちら',
-                        style: TextStyle(color: Colors.blue),
-                        recognizer: TapGestureRecognizer()..onTap = () {
-                          print('アカウントを作成');
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountPage()));
-                        },
-                      ),
-                    ],
-                  ),
+              SizedBox(
+                height: 10,
               ),
-              SizedBox(height: 70,),
+              RichText(
+                text: TextSpan(
+                  style: TextStyle(color: Colors.black),
+                  children: [
+                    TextSpan(text: 'アカウントを作成していない方は'),
+                    TextSpan(
+                      text: 'こちら',
+                      style: TextStyle(color: Colors.blue),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          print('アカウントを作成');
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CreateAccountPage()));
+                        },
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 70,
+              ),
               ElevatedButton(
-                  onPressed: () async {
-                    var result = await Authentication.emailSignIn(email: emailController.text, pass: passController.text);
+                onPressed: () async {
+                  var result = await Authentication.emailSignIn(
+                      email: emailController.text, pass: passController.text);
 
-                    if(result is UserCredential) {
-                      var _result = await UserFirestore.getUser(result.user!.uid);
+                  if (result is UserCredential) {
+                    if (result.user!.emailVerified == true) {
+                      var _result =
+                          await UserFirestore.getUser(result.user!.uid);
                       if (_result == true) {
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Screen()));
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) => Screen()));
                       }
+                    } else {
+                      print('メール認証できてません');
                     }
-                  },
-                  child: Text('emailでログイン'),
+                  }
+                },
+                child: Text('emailでログイン'),
               ),
             ],
           ),

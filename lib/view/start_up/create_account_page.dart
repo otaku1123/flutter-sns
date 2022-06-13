@@ -9,6 +9,7 @@ import 'package:sns_app/utils/authentication.dart';
 import 'package:sns_app/utils/firestore/users.dart';
 import 'package:sns_app/utils/function_utils.dart';
 import 'package:sns_app/utils/widget_utils.dart';
+import 'package:sns_app/view/start_up/check_email_page.dart';
 
 class CreateAccountPage extends StatefulWidget {
   @override
@@ -111,8 +112,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         imagePath: imagePath,
                       );
                       var _result = await UserFirestore.setUser(newAccount);
+
                       if (_result == true) {
-                        Navigator.pop(context);
+                        result.user!.sendEmailVerification();
+                        Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => CheckEmailPage(email: emailController.text, pass: passController.text,)
+                        ));
                       }
                     } else {
                       print('登録失敗');
