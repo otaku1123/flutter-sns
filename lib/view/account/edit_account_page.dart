@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:sns_app/utils/authentication.dart';
 import 'package:sns_app/utils/firestore/users.dart';
 import 'package:sns_app/utils/widget_utils.dart';
+import 'package:sns_app/view/start_up/login_page.dart';
 
 import '../../model/account.dart';
 import '../../utils/function_utils.dart';
@@ -26,7 +27,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
   TextEditingController selfIntroductionController = TextEditingController();
 
   File? image;
-  
+
   ImageProvider getImage() {
     if (image == null) {
       return NetworkImage(myAccount.imagePath);
@@ -41,7 +42,8 @@ class _EditAccountPageState extends State<EditAccountPage> {
 
     nameController = TextEditingController(text: myAccount.name);
     userIdController = TextEditingController(text: myAccount.userId);
-    selfIntroductionController = TextEditingController(text: myAccount.selfIntroduction);
+    selfIntroductionController =
+        TextEditingController(text: myAccount.selfIntroduction);
   }
 
   @override
@@ -101,22 +103,22 @@ class _EditAccountPageState extends State<EditAccountPage> {
                     if (image == null) {
                       imagePath = myAccount.imagePath;
                     } else {
-                      var result = await FunctionUtils.uploadImage(myAccount.id, image!);
+                      var result =
+                          await FunctionUtils.uploadImage(myAccount.id, image!);
                       imagePath = result;
                     }
 
                     Account updateAccount = Account(
-                      id: myAccount.id,
-                      name: nameController.text,
-                      userId: userIdController.text,
-                      selfIntroduction: selfIntroductionController.text,
-                      imagePath: imagePath
-                    );
+                        id: myAccount.id,
+                        name: nameController.text,
+                        userId: userIdController.text,
+                        selfIntroduction: selfIntroductionController.text,
+                        imagePath: imagePath);
 
                     Authentication.myAccount = updateAccount;
 
                     var result = await UserFirestore.updateUser(updateAccount);
-                    if (result == true){
+                    if (result == true) {
                       Navigator.pop(context, true);
                     }
                   }
@@ -124,6 +126,22 @@ class _EditAccountPageState extends State<EditAccountPage> {
                 child: Text(
                   '更新',
                 ),
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Authentication.signOut();
+                  while(Navigator.canPop(context)) {
+                    Navigator.pop(context);
+                  }
+                  Navigator.pushReplacement(context, MaterialPageRoute(
+                      builder: (context) => LoginPage()
+                  ));
+
+                },
+                child: Text('ログアウト'),
               ),
             ],
           ),
