@@ -133,15 +133,30 @@ class _EditAccountPageState extends State<EditAccountPage> {
               ElevatedButton(
                 onPressed: () {
                   Authentication.signOut();
-                  while(Navigator.canPop(context)) {
+                  while (Navigator.canPop(context)) {
                     Navigator.pop(context);
                   }
-                  Navigator.pushReplacement(context, MaterialPageRoute(
-                      builder: (context) => LoginPage()
-                  ));
-
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()));
                 },
                 child: Text('ログアウト'),
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(primary: Colors.red),
+                onPressed: () {
+                  UserFirestore.deleteUser(myAccount.id);
+                  Authentication.deleteAuth();
+
+                  while (Navigator.canPop(context)) {
+                    Navigator.pop(context);
+                  }
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                },
+                child: Text('アカウント削除'),
               ),
             ],
           ),
